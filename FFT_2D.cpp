@@ -4,6 +4,8 @@
 #include <cmath>
 #include <complex>
 
+#define M_PI 3.1415926
+
 // 简化的复数定义（基于标准库）
 using Complex = std::complex<float>;
 
@@ -11,33 +13,28 @@ using Complex = std::complex<float>;
 std::vector<float> HanningWindow(int size) {
     std::vector<float> window(size);
     for (int i = 0; i < size; ++i) {
-        //window[i] = 0.5 * (1 - cos(2 * M_PI * i / (size - 1)));
-        window[i] = 1;
+        window[i] = 0.5 * (1 - cos(2 * M_PI * (i+1) / (size + 1)));
     }
     return window;
 }
 
-void FFT(std::vector<Complex>& input, bool inverse = false) {
-    int size = input.size();
+std::vector<std::vector<Complex>> fftshift(const std::vector<std::vector<Complex>>& input) {
+    int rows = input.size();
+    int cols = input[0].size();
+    int shift_rows = rows / 2;
+    int shift_cols = cols / 2;
 
-    // 创建FFTW输入和输出数组
-    fftw_complex* in = reinterpret_cast<fftw_complex*>(input.data());
-    fftw_complex* out = reinterpret_cast<fftw_complex*>(input.data());
+    std::vector<std::vector<Complex>> output(rows, std::vector<Complex>(cols));
 
-    // 创建FFTW计划
-    fftw_plan plan;
-    if (inverse) {
-        plan = fftw_plan_dft_1d(size, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            int idx_row = (i + shift_rows) % rows;
+            int idx_col = (j + shift_cols) % cols;
+            output[idx_row][idx_col] = input[i][j];
+        }
     }
-    else {
-        plan = fftw_plan_dft_1d(size, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-    }
 
-    // 执行FFT
-    fftw_execute(plan);
-
-    // 销毁计划
-    fftw_destroy_plan(plan);
+    return output;
 }
 
 // 执行一维FFT并返回复数结果向量
@@ -65,7 +62,7 @@ std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift) {
         }
     } else {
         for (int i = 0; i < N; ++i) {
-            result[i] = Complex(out[i][0], -out[i][1]);
+            result[i] = Complex(out[i][0], out[i][1]);
         }
     }
 
@@ -79,36 +76,38 @@ std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift) {
 
 // 二维FFT变换
 std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
-    int QNum = s.size();    //行
-    int SNum = s[0].size(); //列
+    int QNum = s[0].size();    //行
+    int SNum = s.size();       //列
 
-    std::vector<std::vector<Complex>> result_fft(QNum, std::vector<Complex>(SNum));
+    std::vector<std::vector<Complex>> result_fft(SNum, std::vector<Complex>(QNum));
 
     // 应用窗函数和FFT于每一行（距离维度）
     std::vector<float> WindowR = HanningWindow(QNum);
-    for (int i = 0; i < QNum; ++i) {
-        std::vector<Complex> row(SNum);
-        for (int j = 0; j < SNum; ++j) {
-            row[j] = s[i][j] * WindowR[i];
+    for (int i = 0; i < SNum; ++i) {
+        std::vector<Complex> row(QNum);
+        for (int j = 0; j < QNum; ++j) {
+            row[j] = s[i][j] * WindowR[j];
         }
-        row = FFT_1D(row, true); // 使用fftshift
-        for (int j = 0; j < SNum; ++j) {
+        row = FFT_1D(row, false); // 使用fftshift
+        for (int j = 0; j < QNum; ++j) {
             s[i][j] = row[j];
         }
     }
+    s = fftshift(s);
 
     // 应用窗函数和FFT于每一列（速度维度）
     std::vector<float> WindowV = HanningWindow(SNum);
-    for (int j = 0; j < SNum; ++j) {
-        std::vector<Complex> col(QNum);
-        for (int i = 0; i < QNum; ++i) {
-            col[i] = s[i][j] * WindowV[j];
+    for (int j = 0; j < QNum; ++j) {
+        std::vector<Complex> col(SNum);
+        for (int i = 0; i < SNum; ++i) {
+            col[i] = s[i][j] * WindowV[i];
         }
-        col = FFT_1D(col, true); // 使用fftshift
-        for (int i = 0; i < QNum; ++i) {
+        col = FFT_1D(col, false); // 使用fftshift
+        for (int i = 0; i < SNum; ++i) {
             result_fft[i][j] = col[i];
         }
     }
+    result_fft = fftshift(result_fft);
 
     return result_fft;
 }
