@@ -1,13 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <fftw3.h> // 包含FFTW头文件
-#include <cmath>
-#include <complex>
+#include <FFT_2D.h>
 
-#define M_PI 3.1415926
-
-// 简化的复数定义（基于标准库）
-using Complex = std::complex<float>;
 
 // 使用Hanning窗函数
 std::vector<float> HanningWindow(int size) {
@@ -18,6 +10,8 @@ std::vector<float> HanningWindow(int size) {
     return window;
 }
 
+
+//移位函数
 std::vector<std::vector<Complex>> fftshift(const std::vector<std::vector<Complex>>& input) {
     int rows = input.size();
     int cols = input[0].size();
@@ -36,6 +30,7 @@ std::vector<std::vector<Complex>> fftshift(const std::vector<std::vector<Complex
 
     return output;
 }
+
 
 // 执行一维FFT并返回复数结果向量
 std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift) {
@@ -65,7 +60,6 @@ std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift) {
             result[i] = Complex(out[i][0], out[i][1]);
         }
     }
-
     // 清理
     fftw_destroy_plan(plan);
     fftw_free(in);
@@ -73,6 +67,7 @@ std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift) {
 
     return result;
 }
+
 
 // 二维FFT变换
 std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
@@ -108,24 +103,6 @@ std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
         }
     }
     result_fft = fftshift(result_fft);
-
+    
     return result_fft;
 }
-
-//int main() {
-//    // 示例：创建一个简单的输入信号
-//    int QNum = 1024; // 假设的天线数
-//    int SNum = 1024; // 假设的快时间样本数
-//
-//    std::vector<std::vector<Complex>> s(QNum, std::vector<Complex>(SNum, Complex(1.0, 0))); // 示例输入
-//
-//    auto result_fft = FFT_2D(s, QNum, SNum);
-//
-//    // 打印某些结果以验证（实际使用时应替换为适当的结果处理或可视化代码）
-//    std::cout << "FFT result (some values):" << std::endl;
-//    for (int i = 0; i < 5; ++i) { // 仅打印前5个结果进行示意
-//        std::cout << result_fft[i][i].real() << " + " << result_fft[i][i].imag() << "i" << std::endl;
-//    }
-//
-//    return 0;
-//}

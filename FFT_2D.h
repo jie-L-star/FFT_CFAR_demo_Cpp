@@ -1,11 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <fftw3.h> // 包含FFTW头文件
-#include <cmath>
-#include <complex>
+#include <main.h>
+#include <fftw3.h>
 
-// 简化的复数定义（基于标准库）
-using Complex = std::complex<float>;
+#define M_PI 3.1415926
+
 
 std::vector<Complex> FFT_1D(const std::vector<Complex>& input, bool shift);
 std::vector<std::vector<Complex>> fftshift(const std::vector<std::vector<Complex>>& input);

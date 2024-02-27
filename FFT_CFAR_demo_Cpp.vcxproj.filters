@@ -18,15 +18,21 @@
     <ClCompile Include="FFT_2D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="test_csv.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FileName.cpp">
+    <ClCompile Include="load_data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT_2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="load_data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
