@@ -5,8 +5,13 @@
 
 int main() {
 
-    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14.csv";
-    const int dim1 = 8;     // 第一维大小 通道(8个)
+    //std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14.csv";
+    //const int dim1 = 8;     // 第一维大小 通道(8个)
+    //const int dim2 = 9600;  // 第二维大小 时域(慢时间)
+    //const int dim3 = 792;   // 第三维大小 频域(快时间)
+
+    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6.csv";
+    const int dim1 = 1;     // 第一维大小 通道(8个)
     const int dim2 = 9600;  // 第二维大小 时域(慢时间)
     const int dim3 = 792;   // 第三维大小 频域(快时间)
 
@@ -41,16 +46,16 @@ int main() {
     //    }
     //}
 
-    for (int i = 0; i < dim1; i++) {
-        for (int j = 0; j < t_length1; j++) {
-            threeDArray[i].back().pop_back();
-        }
-        // 调整二维向量的大小以匹配新的行数和列数
-        threeDArray[i].resize(t_length2);
-        for (auto& row : threeDArray[i]) {
-            row.resize(t_length1);
-        }
-    }
+    //for (int i = 0; i < dim1; i++) {
+    //    for (int j = 0; j < t_length1; j++) {
+    //        threeDArray[i].back().pop_back();
+    //    }
+    //    // 调整二维向量的大小以匹配新的行数和列数
+    //    threeDArray[i].resize(t_length2);
+    //    for (auto& row : threeDArray[i]) {
+    //        row.resize(t_length1);
+    //    }
+    //}
 
     //for (int i = 0; i < dim1; ++i) {
     //    for (int row = 0; row < dim2; ++row) {

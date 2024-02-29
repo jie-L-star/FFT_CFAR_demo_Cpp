@@ -76,11 +76,11 @@ std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
     int NfftR = 1024;
     int WindowLenR = std::min(NfftR, QNum); //距离维窗长度
 
-    std::vector<std::vector<Complex>> s_for_Rfft(WindowLenR, std::vector<Complex>(SNum));
+    std::vector<std::vector<Complex>> s_for_Rfft(SNum, std::vector<Complex>(WindowLenR));
 
     // 数组切片
-    for (int i = 0; i < WindowLenR; ++i) {
-        for (int j = 0; j < SNum; ++j) {
+    for (int i = 0; i < SNum; ++i) {
+        for (int j = 0; j < WindowLenR; ++j) {
             s_for_Rfft[i][j] = s[i][j];
         }
     }
