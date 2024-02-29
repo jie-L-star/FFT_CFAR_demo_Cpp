@@ -92,21 +92,21 @@ std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
     for (int i = 0; i < SNum; ++i) {
         std::vector<Complex> row(QNum);
         for (int j = 0; j < QNum; ++j) {
-            row[j] = s[i][j] * WindowR[j];
+            row[j] = s_for_Rfft[i][j] * WindowR[j];
         }
         row = FFT_1D(row, false); // 使用fftshift
         for (int j = 0; j < QNum; ++j) {
-            s[i][j] = row[j];
+            s_for_Rfft[i][j] = row[j];
         }
     }
-    s = fftshift(s);
+    s_for_Rfft = fftshift(s_for_Rfft);
 
     // 应用窗函数和FFT于每一列（速度维度）
     std::vector<float> WindowV = HanningWindow(SNum);
     for (int j = 0; j < QNum; ++j) {
         std::vector<Complex> col(SNum);
         for (int i = 0; i < SNum; ++i) {
-            col[i] = s[i][j] * WindowV[i];
+            col[i] = s_for_Rfft[i][j] * WindowV[i];
         }
         col = FFT_1D(col, false); // 使用fftshift
         for (int i = 0; i < SNum; ++i) {
@@ -114,6 +114,12 @@ std::vector<std::vector<Complex>> FFT_2D(std::vector<std::vector<Complex>>& s) {
         }
     }
     result_fft = fftshift(result_fft);
-    
-    return result_fft;
+
+    //切片 0~50m,-2m/s~2m/s
+    std::vector<std::vector<Complex>> result_fft1(427, std::vector<Complex>(65));
+    for (int i = 0; i < 427; ++i)
+        for (int j = 0; j < 65; ++j)
+            result_fft1[i][j] = result_fft[i+288-1][j];
+
+    return result_fft1;
 }

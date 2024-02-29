@@ -21,7 +21,7 @@ int main() {
     //const int dim3 = 3;   // 第三维大小 频域(快时间)
 
     const int t_length1 = 1000;
-    const int t_length2 = (dim2 - 1000) / 100;  //tlength
+    const int t_length = (dim2 - 1000) / 100;  //tlength
 
     std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
 
@@ -35,37 +35,27 @@ int main() {
                 threeDArray[i][j][k] = std::conj(threeDArray[i][j][k]);
         }
     }
-    //for (int i = 0; i < dim1; i++) {
-    //    //for (int j = 0; j < 1; j++) {
-    //    //    threeDArray[i].back().pop_back();
-    //    //}
-    //    // 调整二维向量的大小以匹配新的行数和列数
-    //    threeDArray[i].resize(2);
-    //    for (auto& row : threeDArray[i]) {
-    //        row.resize(2);
-    //    }
-    //}
 
-    //for (int i = 0; i < dim1; i++) {
-    //    for (int j = 0; j < t_length1; j++) {
-    //        threeDArray[i].back().pop_back();
-    //    }
-    //    // 调整二维向量的大小以匹配新的行数和列数
-    //    threeDArray[i].resize(t_length2);
-    //    for (auto& row : threeDArray[i]) {
-    //        row.resize(t_length1);
-    //    }
-    //}
+    std::vector<std::vector<std::vector<Complex>>> Receive(t_length, std::vector<std::vector<Complex>>(t_length1, std::vector<Complex>(dim3)));
 
-    //for (int i = 0; i < dim1; ++i) {
-    //    for (int row = 0; row < dim2; ++row) {
-    //        for (int col = 0; col < 1000; ++col) {
-    //            Recieve[row][col][i] = Recieve_14[row][100 * (i - 1)][5];
-    //        }
-    //    }
-    //}
+    // FFT_2D结果
+    std::vector<std::vector<std::vector<Complex>>> Result_fft(t_length, std::vector<std::vector<Complex>>(427, std::vector<Complex>(65)));
 
-    FFT_2D(threeDArray[0]);
+
+    for (int i = 0; i < t_length; ++i) {
+        for (int j = 0; j < t_length1; ++j) {
+            for (int k = 0; k < dim3; ++k) {
+                Receive[i][j][k] = threeDArray[0][100 * i + j][k];
+            }
+        }
+        Result_fft[i] = FFT_2D(Receive[i]);
+    }
+
+
+    //FFT_2D(threeDArray[0]);
+
+
+
 
     //std::ofstream outputFile("fft_result.txt");
 
