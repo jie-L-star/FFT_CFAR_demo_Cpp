@@ -135,16 +135,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CFAR.cpp" />
     <ClCompile Include="FFT_2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="load_data.cpp" />
+    <ClCompile Include="main_2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CFAR.h" />
     <ClInclude Include="FFT_2D.h" />
     <ClInclude Include="load_data.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="matlab_function.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

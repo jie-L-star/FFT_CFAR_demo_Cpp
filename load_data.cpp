@@ -62,3 +62,7 @@ std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int 
 
     return threeDArray;
 }
+
+
+//实现"linspace"生成1维向量
+//std::vector

@@ -24,6 +24,12 @@
     <ClCompile Include="load_data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CFAR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main_2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT_2D.h">
@@ -33,6 +39,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="matlab_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFAR.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
