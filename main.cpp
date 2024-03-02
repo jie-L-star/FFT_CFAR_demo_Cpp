@@ -50,36 +50,36 @@ int main() {
         Result_fft[i] = FFT_2D(Receive[i]);
     }
 
-    std::vector<std::vector<double>> R_temp (velocity_index_size, std::vector<double>(range_index_size));
-    for (size_t i = 0; i < velocity_index_size; i++)
-        for (size_t j = 0; j < range_index_size; j++)
-            R_temp[i][j] = pow(std::abs(Result_fft[0][i][j]), 2);
+    CFAR_result my_result[t_length];
 
+    std::vector<std::vector<double>> R_temp(velocity_index_size, std::vector<double>(range_index_size));
+    for (int ii = 0; ii < t_length; ++ii) {
+        for (size_t i = 0; i < velocity_index_size; i++)
+            for (size_t j = 0; j < range_index_size; j++)
+                R_temp[i][j] = pow(std::abs(Result_fft[ii][i][j]), 2);
 
-    CFAR(R_temp);
+        my_result[ii] = CFAR(R_temp);
+    }
 
 
     //绘图用
     //std::vector<double> range_2dfft = linspace<double>(0, (c0 / (2 * delta_f)), (K + 1));
     //std::vector<double> velocity_2dfft = linspace<double>(-lambda / 2 / Ts, lambda / 2 / Ts, 1000 + 1);
 
-    //std::ofstream outputFile("fft_result.txt");
+    std::ofstream outputFile("CFAR_results.txt");
 
-    //for (int i = 0; i < dim1; ++i) {
+    for (int i = 0; i < t_length; ++i) {
+        for (int j = 0; j < my_result[i].Amplititude.size(); ++j) {
+            outputFile << my_result[i].Amplititude[j] << "  ";
+        }
 
+        for (int j = 0; j < my_result[i].SWCfarResultNJ_c[0].size(); ++j) {
+            outputFile << "(" << my_result[i].SWCfarResultNJ_c[0][j] << ", " << my_result[i].SWCfarResultNJ_c[1][j] << ") ";
+        }
+        outputFile << std::endl;
+    }
 
-    //    for (int j = 0; j < dim2; ++j) {
-    //        threeDArray[i][j] = FFT_1D(threeDArray[i][j], false);
-    //        // 将FFT结果保存到文件
-    //        for (int k = 0; k < dim3; ++k) {
-    //            outputFile << threeDArray[i][j][k];
-    //        }
-    //        outputFile << std::endl;
-    //    }
-    //    outputFile << std::endl;
-    //}
-
-    //outputFile.close();
+    outputFile.close();
 
     return 0;
 }

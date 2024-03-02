@@ -39,7 +39,7 @@ int main() {
     }
     
 
-    CFAR(R_temp);
+    CFAR_result my_result = CFAR(R_temp);
 
     return 0;
 }
