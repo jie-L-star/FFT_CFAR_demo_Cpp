@@ -1,21 +1,43 @@
 #include <main.h>
 #include <FFT_2D.h>
 #include <load_data.h>
+#include <load_bin_data.h>
 #include <matlab_function.h>
 #include <CFAR.h>
+#include <time.h>
+
+void test_function()
+{
+    load_bin_data();
+}
 
 
 int main() {
+
+    test_function();
+
+    clock_t start_time = clock();
 
     //std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14.csv";
     //const int dim1 = 8;     // 第一维大小 通道(8个)
     //const int dim2 = 9600;  // 第二维大小 时域(慢时间)
     //const int dim3 = 792;   // 第三维大小 频域(快时间)
 
-    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6.csv";
+    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6_float.csv";
     const int dim1 = 1;     // 第一维大小 通道(8个)
     const int dim2 = 9600;  // 第二维大小 时域(慢时间)
     const int dim3 = 792;   // 第三维大小 频域(快时间)
+
+    //std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/Y.csv";
+    //const int dim1 = 1;     // 第一维大小 通道(8个)
+    //const int dim2 = 4;  // 第二维大小 时域(慢时间)
+    //const int dim3 = 3;   // 第三维大小 频域(快时间)
+
+    //加载数据
+    std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
+    threeDArray = load_data(dim1, dim2, dim3, path);
+
+    std::cout << "load_data: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
     //一组1000个符号，以100为步进长度
     const int t_length1 = 1000;
@@ -25,13 +47,9 @@ int main() {
     std::vector<int> range_index = maohao<int>(range_index_min, range_index_max, 1);
     std::vector<int> velocity_index = maohao<int>(velocity_index_min, velocity_index_max, 1);
 
-
-    std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
     std::vector<std::vector<std::vector<Complex>>> Receive(t_length, std::vector<std::vector<Complex>>(t_length1, std::vector<Complex>(dim3)));
     std::vector<std::vector<std::vector<Complex>>> Result_fft(t_length, std::vector<std::vector<Complex>>(velocity_index_size, std::vector<Complex>(range_index_size)));
 
-    //加载数据
-    threeDArray = load_data(dim1, dim2, dim3, path);
     for (int i = 0; i < dim1; ++i) {
         for (int j = 0; j < dim2; ++j) {
             threeDArray[i][j] = FFT_1D(threeDArray[i][j], false);
@@ -49,6 +67,7 @@ int main() {
         }
         Result_fft[i] = FFT_2D(Receive[i]);
     }
+    std::cout << "FFT_2D: " << (clock() - start_time)/1000.0 << "s" << std::endl;
 
     CFAR_result my_result[t_length];
 
@@ -60,8 +79,8 @@ int main() {
 
         my_result[ii] = CFAR(R_temp);
     }
-
-
+    
+    std::cout << "CFAR: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
     //绘图用
     //std::vector<double> range_2dfft = linspace<double>(0, (c0 / (2 * delta_f)), (K + 1));
     //std::vector<double> velocity_2dfft = linspace<double>(-lambda / 2 / Ts, lambda / 2 / Ts, 1000 + 1);
@@ -80,6 +99,8 @@ int main() {
     }
 
     outputFile.close();
+
+    std::cout << "end: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
     return 0;
 }
