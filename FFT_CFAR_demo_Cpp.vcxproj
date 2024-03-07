@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.props" Condition="Exists('packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -71,8 +72,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\FFT_CFAR_demo_Cpp;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\FFT_CFAR_demo_Cpp\packages\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\visual studio 2019\libs\boost_1_83_0;D:\FFT_CFAR_demo_Cpp;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\visual studio 2019\libs\boost_1_83_0\lib;D:\FFT_CFAR_demo_Cpp\packages\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,13 +111,16 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>D:\FFT_CFAR_demo_Cpp\packages\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\FFT_CFAR_demo_Cpp\packages\bin;D:\FFT_CFAR_demo_Cpp\packages\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>E:\visual studio 2019\libs\boost_1_83_0\stage\lib;D:\FFT_CFAR_demo_Cpp\packages\bin;D:\FFT_CFAR_demo_Cpp\packages\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>100000000</StackReserveSize>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,10 +144,18 @@
     <ClCompile Include="FFT_2D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FileName.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="load_bin_data.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="load_data.cpp" />
+    <ClCompile Include="load_data.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="main_2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -150,11 +163,23 @@
   <ItemGroup>
     <ClInclude Include="CFAR.h" />
     <ClInclude Include="FFT_2D.h" />
+    <ClInclude Include="load_bin_data.h" />
     <ClInclude Include="load_data.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="matlab_function.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.targets" Condition="Exists('packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.props'))" />
+    <Error Condition="!Exists('packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\vcpkg.E.git.vcpkg.1.0.0\build\native\vcpkg.E.git.vcpkg.targets'))" />
+  </Target>
 </Project>
