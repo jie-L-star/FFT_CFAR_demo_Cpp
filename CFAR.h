@@ -2,16 +2,16 @@
 
 struct CFAR_result {
 	std::vector<std::vector<int>> SWCfarResultNJ_c;
-	std::vector<double> Amplititude;
+	std::vector<float> Amplititude;
 
 	CFAR_result() :SWCfarResultNJ_c(2) {}
 };
 
 
-CFAR_result CFAR(std::vector<std::vector<double>>& s);
+CFAR_result CFAR(std::vector<std::vector<float>>& s);
 
 int CFARHelper1(int x, int Nmax);
 std::vector<int> CFARHelper1(std::vector<int> x, int Nmax);
-bool CFARHelper2(std::vector<std::vector<double>> data, int x, int y, int Xmax, int Ymax);
+bool CFARHelper2(std::vector<std::vector<float>> data, int x, int y, int Xmax, int Ymax);
 std::vector<int> CFARHelper3(std::vector<int> x, int Nmax);
-double findMedian(std::vector<double>& nums1, std::vector<double>& nums2);
+float findMedian(std::vector<float>& nums1, std::vector<float>& nums2);
