@@ -12,21 +12,27 @@
 #define NfftRRight	50
 #define PfN			1e-8
 
-CFAR_result CFAR(std::vector<std::vector<double>>& s) {
+CFAR_result CFAR(std::vector<std::vector<float>>& s) {
 	int Rsize = s[0].size();
 	int Vsize = s.size();
-	double NoiseAlphaR = Nc_R * (std::pow((double)PfN, (double)(-1 / (double)Nc_R))-1);
-	double NoiseAlphaV = Nc_V * (std::pow((double)PfN, (double)(-1 / (double)Nc_V))-1);
+	float NoiseAlphaR = Nc_R * (std::pow((float)PfN, (float)(-1 / (float)Nc_R))-1);
+	float NoiseAlphaV = Nc_V * (std::pow((float)PfN, (float)(-1 / (float)Nc_V))-1);
 
-	std::vector<std::vector<double>> Threshold(Vsize, std::vector<double>(Rsize));
-	std::vector<std::vector<double>> WCfar(Vsize, std::vector<double>(Rsize));
+	std::vector<std::vector<float>> Threshold(Vsize, std::vector<float>(Rsize));
+	std::vector<std::vector<float>> WCfar(Vsize, std::vector<float>(Rsize));
 	
 	// 结果返回值
 	CFAR_result my_result;
 
-	std::vector<double> ReferenceR1, ReferenceR2, ReferenceV1, ReferenceV2;
+	//std::vector<float> ReferenceR1, ReferenceR2, ReferenceV1, ReferenceV2;
+	std::vector<float> ReferenceR1(Rsize);
+	std::vector<float> ReferenceR2(Rsize);
+
+	std::vector<float> ReferenceV1(Vsize);
+	std::vector<float> ReferenceV2(Vsize);
+
 	std::vector<int> R_temp;
-	double NoisePowerR, NoisePowerV;
+	float NoisePowerR, NoisePowerV;
 
 
 	for (size_t i = 0; i < NfftRRight - NfftRLeft + 1; i++){
@@ -43,6 +49,8 @@ CFAR_result CFAR(std::vector<std::vector<double>>& s) {
 			NoisePowerR = findMedian(ReferenceR1, ReferenceR2);
 			NoisePowerV = findMedian(ReferenceV1, ReferenceV2);
 			Threshold[j][i] = std::max(NoisePowerR * NoiseAlphaR, NoisePowerV * NoiseAlphaV);
+
+			// 高于阈值代表目标
 			WCfar[j][i] = s[j][i] > 1 * Threshold[j][i];
 
 			if (WCfar[j][i] == 1) {
@@ -93,7 +101,7 @@ std::vector<int> CFARHelper1(std::vector<int> x, int Nmax) {
 }
 
 
-bool CFARHelper2(std::vector<std::vector<double>> data, int x, int y, int Xmax, int Ymax) {
+bool CFARHelper2(std::vector<std::vector<float>> data, int x, int y, int Xmax, int Ymax) {
 	bool flag = false;
 
 	//std::cout << CFARHelper1(y - 1, Ymax) << " " << CFARHelper1(y + 1, Ymax) << " " << CFARHelper1(x - 1, Xmax) << " " << CFARHelper1(x + 1, Xmax) << std::endl;
@@ -123,8 +131,8 @@ std::vector<int> CFARHelper3(std::vector<int> x, int Nmax) {
 }
 
 // 寻找数组中位数
-double findMedian(std::vector<double>& nums1, std::vector<double>& nums2) {
-	std::vector<double> merged;
+float findMedian(std::vector<float>& nums1, std::vector<float>& nums2) {
+	std::vector<float> merged;
 	merged.insert(merged.end(), nums1.begin(), nums1.end());
 	merged.insert(merged.end(), nums2.begin(), nums2.end());
 

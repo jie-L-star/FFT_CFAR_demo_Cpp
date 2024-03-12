@@ -36,9 +36,6 @@
     <ClCompile Include="load_bin_data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main_3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT_2D.h">

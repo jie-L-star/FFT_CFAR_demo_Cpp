@@ -6,15 +6,16 @@
 #include <CFAR.h>
 #include <time.h>
 
-void test_function()
-{
-    load_bin_data();
-}
-
+/*
+* main.cpp 主函数，单线程读取并处理，结果和MATLAB通道6一致
+* main_2.cpp 主函数，尝试双线程，仅读取1*1000*792共计15次，耗时较长，还需要更改
+* FileName.cpp 用boost库读取数据，效果不变
+* load_bin_data.cpp 读取bin文件
+*/
 
 int main() {
 
-    test_function();
+    //load_bin_data();
 
     clock_t start_time = clock();
 
@@ -23,15 +24,10 @@ int main() {
     //const int dim2 = 9600;  // 第二维大小 时域(慢时间)
     //const int dim3 = 792;   // 第三维大小 频域(快时间)
 
-    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6_float.csv";
+    std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6.csv";
     const int dim1 = 1;     // 第一维大小 通道(8个)
     const int dim2 = 9600;  // 第二维大小 时域(慢时间)
     const int dim3 = 792;   // 第三维大小 频域(快时间)
-
-    //std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/Y.csv";
-    //const int dim1 = 1;     // 第一维大小 通道(8个)
-    //const int dim2 = 4;  // 第二维大小 时域(慢时间)
-    //const int dim3 = 3;   // 第三维大小 频域(快时间)
 
     //加载数据
     std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
@@ -40,8 +36,9 @@ int main() {
     std::cout << "load_data: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
     //一组1000个符号，以100为步进长度
+    const int step_size = 600;
     const int t_length1 = 1000;
-    const int t_length = (dim2 - 1000) / 100;  //tlength
+    const int t_length = (dim2 - t_length1) / step_size;  //tlength
 
     //距离范围为0~50m 速度范围为-4~4m/s
     std::vector<int> range_index = maohao<int>(range_index_min, range_index_max, 1);
@@ -62,7 +59,7 @@ int main() {
     for (int i = 0; i < t_length; ++i) {
         for (int j = 0; j < t_length1; ++j) {
             for (int k = 0; k < K; ++k) {
-                Receive[i][j][k] = threeDArray[0][100 * i + j][k];
+                Receive[i][j][k] = threeDArray[0][step_size * i + j][k];
             }
         }
         Result_fft[i] = FFT_2D(Receive[i]);
@@ -71,7 +68,7 @@ int main() {
 
     CFAR_result my_result[t_length];
 
-    std::vector<std::vector<double>> R_temp(velocity_index_size, std::vector<double>(range_index_size));
+    std::vector<std::vector<float>> R_temp(velocity_index_size, std::vector<float>(range_index_size));
     for (int ii = 0; ii < t_length; ++ii) {
         for (size_t i = 0; i < velocity_index_size; i++)
             for (size_t j = 0; j < range_index_size; j++)
@@ -82,8 +79,8 @@ int main() {
     
     std::cout << "CFAR: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
     //绘图用
-    //std::vector<double> range_2dfft = linspace<double>(0, (c0 / (2 * delta_f)), (K + 1));
-    //std::vector<double> velocity_2dfft = linspace<double>(-lambda / 2 / Ts, lambda / 2 / Ts, 1000 + 1);
+    //std::vector<float> range_2dfft = linspace<float>(0, (c0 / (2 * delta_f)), (K + 1));
+    //std::vector<float> velocity_2dfft = linspace<float>(-lambda / 2 / Ts, lambda / 2 / Ts, 1000 + 1);
 
     std::ofstream outputFile("CFAR_results.txt");
 
@@ -104,7 +101,5 @@ int main() {
 
     return 0;
 }
-
- 
 
  

@@ -28,18 +28,6 @@ std::vector<std::vector<std::vector<Complex>>> load_bin_data(void) {
         crs_rx_Iq_slot_ant[1][islot].insert(crs_rx_Iq_slot_ant[1][islot].begin(), socketdata.begin() + nSC, socketdata.end());
     }
 
-    //// 加载96文件夹中的数据
-    //for (int iAnt = 0; iAnt < nRxAnt2; ++iAnt) {
-    //    std::string filePath = PATH_DIR_GNB_96 + "dataContent_" + std::to_string(iAnt) + "_*.bin"; // 文件名模式
-    //    for (int islot = 0; islot < LengthFiles; ++islot) {
-    //        std::string path = filePath; // 此处添加找到具体文件的代码
-    //        // 调用 func_readbin 函数读取数据并存储到 crs_rx_Iq_slot_ant 中
-    //         socketdata = func_readbin(path);
-    //         for (int i = 0; i < nSC; ++i) {
-    //             crs_rx_Iq_slot_ant[i][islot][nRxAnt1 + iAnt] = socketdata[i];
-    //         }
-    //    }
-    //}
 
     return crs_rx_Iq_slot_ant;
 }
