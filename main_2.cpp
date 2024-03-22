@@ -138,7 +138,7 @@ int main() {
 
 
     std::vector<std::thread> consumer;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 1; ++i) {
         consumer.push_back(std::thread(consume_data_segments, std::ref(dataQueue), std::ref(mtx), std::ref(cv)));
     }
 

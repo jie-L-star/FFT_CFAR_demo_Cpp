@@ -108,8 +108,8 @@ std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int 
             if (j == dim2) {
                 j = 0;
                 i++;
-                //if (i==2)
-                //    return threeDArray;
+                if (i==dim1)
+                    return threeDArray;
             }
         }
     }

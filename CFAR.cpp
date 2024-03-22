@@ -34,8 +34,8 @@ CFAR_result CFAR(std::vector<std::vector<float>>& s) {
 	std::vector<int> R_temp;
 	float NoisePowerR, NoisePowerV;
 
-	vector<vector<int>> temp_Vsize_1;
-	vector<vector<int>> temp_Vsize_2;
+	std::vector<std::vector<int>> temp_Vsize_1;
+	std::vector<std::vector<int>> temp_Vsize_2;
 
 	for (size_t j = 0; j < Vsize;j++) {
 		temp_Vsize_1.push_back(CFARHelper1(maohao<int>(j - 2 - (Nc_V / 2 - 1) * Nc_V_Gap, j - 2, Nc_V_Gap), Vsize));
@@ -44,8 +44,8 @@ CFAR_result CFAR(std::vector<std::vector<float>>& s) {
 
 	for (size_t i = 0; i < NfftRRight - NfftRLeft + 1; i++){
 
-		vector<int> temp_Rsize_1 = CFARHelper3(maohao<int>(i - 2 - (Nc_R / 2 - 1) * Nc_R_Gap, i - 2, Nc_R_Gap), Rsize);
-		vector<int> temp_Rsize_2 = CFARHelper3(maohao<int>(i + 2, i + 2 + (Nc_R / 2 - 1) * Nc_R_Gap, Nc_R_Gap), Rsize);
+		std::vector<int> temp_Rsize_1 = CFARHelper3(maohao<int>(i - 2 - (Nc_R / 2 - 1) * Nc_R_Gap, i - 2, Nc_R_Gap), Rsize);
+		std::vector<int> temp_Rsize_2 = CFARHelper3(maohao<int>(i + 2, i + 2 + (Nc_R / 2 - 1) * Nc_R_Gap, Nc_R_Gap), Rsize);
 
 		for (size_t j = 0; j < Vsize; j++) {
 			if (CFARHelper2(s, i, j, Rsize, Vsize) == 0) {

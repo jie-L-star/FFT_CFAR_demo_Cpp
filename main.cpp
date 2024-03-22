@@ -13,8 +13,18 @@
 * load_bin_data.cpp 读取bin文件
 */
 
+void test(void){
+    const int n = 1000;
+    std::vector<std::vector<Complex>> A(n, std::vector<Complex>(n));
+    std::vector<std::vector<Complex>> B(n, std::vector<Complex>(n));
+
+    multiplyVectors_eigen(A, B);
+}
+
+
 int main() {
 
+    //test();
     //load_bin_data();
 
     clock_t start_time = clock();
@@ -36,7 +46,7 @@ int main() {
     std::cout << "load_data: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
     //一组1000个符号，以100为步进长度
-    const int step_size = 600;
+    const int step_size = 100;
     const int t_length1 = 1000;
     const int t_length = (dim2 - t_length1) / step_size;  //tlength
 
