@@ -54,19 +54,16 @@ void load_data_void(int dim1, int dim2, int dim3, std::string path, std::vector<
 }
 
 
-std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int dim3, std::string path) {
+void load_data(int dim1, int dim2, int dim3, std::string path, std::vector<std::vector<std::vector<Complex>>> &threeDArray) {
 
     int size;
-    size = dim1 * dim2 * dim3;
-
-    std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
 
     // 打开CSV文件
     std::ifstream file(path);
 
     if (!file.is_open()) {
         std::cerr << "无法打开文件" << std::endl;
-        return {};  //返回空容器
+        return;  //返回空容器
     }
 
     std::string line;
@@ -90,7 +87,7 @@ std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int 
         cell_ss >> real_part >> plus_sign >> imag_part >> imaginary_unit;
 
         if (plus_sign == '+' && imaginary_unit == 'i') {
-            threeDArray[i][j][k] = Complex(real_part, imag_part);
+            threeDArray[i][j][k] = Complex(real_part, imag_part);  //此处为-代表共轭采集
         }
         else if (plus_sign == '-' && imaginary_unit == 'i')
         {
@@ -98,7 +95,7 @@ std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int 
         }
         else {
             std::cerr << "Error: Invalid complex number format in CSV file" << std::endl;
-            return {};  //返回空容器
+            return;  //返回空容器
         }
 
         k++;
@@ -109,12 +106,12 @@ std::vector<std::vector<std::vector<Complex>>>load_data(int dim1, int dim2, int 
                 j = 0;
                 i++;
                 if (i==dim1)
-                    return threeDArray;
+                    return;
             }
         }
     }
 
-    return threeDArray;
+    return;
 }
 
 

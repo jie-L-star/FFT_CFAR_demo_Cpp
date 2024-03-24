@@ -13,13 +13,13 @@
 * load_bin_data.cpp 读取bin文件
 */
 
-void test(void){
-    const int n = 1000;
-    std::vector<std::vector<Complex>> A(n, std::vector<Complex>(n));
-    std::vector<std::vector<Complex>> B(n, std::vector<Complex>(n));
-
-    multiplyVectors_eigen(A, B);
-}
+//void test(void){
+//    const int n = 1000;
+//    std::vector<std::vector<Complex>> A(n, std::vector<Complex>(n));
+//    std::vector<std::vector<Complex>> B(n, std::vector<Complex>(n));
+//
+//    multiplyVectors_eigen(A, B);
+//}
 
 
 int main() {
@@ -41,7 +41,7 @@ int main() {
 
     //加载数据
     std::vector<std::vector<std::vector<Complex>>> threeDArray(dim1, std::vector<std::vector<Complex>>(dim2, std::vector<Complex>(dim3)));
-    threeDArray = load_data(dim1, dim2, dim3, path);
+    load_data(dim1, dim2, dim3, path, threeDArray);
 
     std::cout << "load_data: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
@@ -50,48 +50,33 @@ int main() {
     const int t_length1 = 1000;
     const int t_length = (dim2 - t_length1) / step_size;  //tlength
 
-    //距离范围为0~50m 速度范围为-4~4m/s
-    std::vector<int> range_index = maohao<int>(range_index_min, range_index_max, 1);
-    std::vector<int> velocity_index = maohao<int>(velocity_index_min, velocity_index_max, 1);
-
-    std::vector<std::vector<std::vector<Complex>>> Receive(t_length, std::vector<std::vector<Complex>>(t_length1, std::vector<Complex>(dim3)));
+    std::vector<std::vector<Complex>> Receive;
     std::vector<std::vector<std::vector<Complex>>> Result_fft(t_length, std::vector<std::vector<Complex>>(velocity_index_size, std::vector<Complex>(range_index_size)));
 
+    //共轭在采集数据时实现
     for (int i = 0; i < dim1; ++i) {
         for (int j = 0; j < dim2; ++j) {
-            threeDArray[i][j] = FFT_1D(threeDArray[i][j], false);
+            FFT_1D(threeDArray[i][j]);
             for (int k = 0; k < dim3; ++k)
                 threeDArray[i][j][k] = std::conj(threeDArray[i][j][k]);
         }
     }
 
-    // FFT_2D结果
-    for (int i = 0; i < t_length; ++i) {
-        for (int j = 0; j < t_length1; ++j) {
-            for (int k = 0; k < K; ++k) {
-                Receive[i][j][k] = threeDArray[0][step_size * i + j][k];
-            }
-        }
-        Result_fft[i] = FFT_2D(Receive[i]);
-    }
-    std::cout << "FFT_2D: " << (clock() - start_time)/1000.0 << "s" << std::endl;
-
     CFAR_result my_result[t_length];
-
     std::vector<std::vector<float>> R_temp(velocity_index_size, std::vector<float>(range_index_size));
+
     for (int ii = 0; ii < t_length; ++ii) {
-        for (size_t i = 0; i < velocity_index_size; i++)
-            for (size_t j = 0; j < range_index_size; j++)
-                R_temp[i][j] = pow(std::abs(Result_fft[ii][i][j]), 2);
+        Receive.assign(threeDArray[0].begin()+ step_size * ii, threeDArray[0].begin() + step_size * ii + t_length1);
+        FFT_2D(Receive);
+
+        for (int i = 0; i < velocity_index_size; i++)
+            for (int j = 0; j < range_index_size; j++)
+                R_temp[i][j] = pow(std::abs(Receive[i][j]), 2);
 
         my_result[ii] = CFAR(R_temp);
     }
-    
-    std::cout << "CFAR: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
-    //绘图用
-    //std::vector<float> range_2dfft = linspace<float>(0, (c0 / (2 * delta_f)), (K + 1));
-    //std::vector<float> velocity_2dfft = linspace<float>(-lambda / 2 / Ts, lambda / 2 / Ts, 1000 + 1);
 
+    std::cout << "CFAR: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
     std::ofstream outputFile("CFAR_results.txt");
 
     for (int i = 0; i < t_length; ++i) {

@@ -15,3 +15,4 @@ std::vector<int> CFARHelper1(std::vector<int> x, int Nmax);
 bool CFARHelper2(std::vector<std::vector<float>> data, int x, int y, int Xmax, int Ymax);
 std::vector<int> CFARHelper3(std::vector<int> x, int Nmax);
 float findMedian(std::vector<float>& nums1, std::vector<float>& nums2);
+void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::vector<std::vector<bool>> &result);
