@@ -131,20 +131,25 @@ bool CFARHelper2(std::vector<std::vector<float>> data, int x, int y, int Xmax, i
 }
 
 
-std::vector<int> CFARHelper3(std::vector<int> x, int Nmax) {
-	auto item = x.begin();
-	std::vector<int> temp;
+//std::vector<int> CFARHelper3(std::vector<int> vec, int Nmax) {
+//	auto item = vec.begin();
+//	std::vector<int> temp;
+//
+//	while (item != vec.end())
+//	{
+//		if (!(*item < 0 || *item > Nmax-1)) {
+//			temp.push_back(*item);
+//		}
+//
+//		item++;
+//	}
+//
+//	return temp;
+//}
 
-	while (item != x.end())
-	{
-		if (!(*item < 0 || *item > Nmax-1)) {
-			temp.push_back(*item);
-		}
-
-		item++;
-	}
-
-	return temp;
+std::vector<int> CFARHelper3(std::vector<int> vec, int Nmax) {
+	vec.erase(std::remove_if(vec.begin(), vec.end(),[Nmax](int x) { return x < 0 || x > Nmax-1; }), vec.end());
+	return vec;
 }
 
 // 寻找数组中位数
@@ -168,7 +173,7 @@ float findMedian(std::vector<float>& nums1, std::vector<float>& nums2) {
 void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::vector<std::vector<bool>> &result) {
 	int rows = data.size();
 	int cols = data[0].size();
-	int cnt_true = 0;
+	//int cnt_true = 0;
 	// 初始化结果矩阵，全部设为false
 
 	// 遍历矩阵中的每个元素
@@ -176,11 +181,11 @@ void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::v
 		for (int j = 0; j < result[0].size(); ++j) {
 			if (data[i][j] > data[(i - 1 + rows) % rows][j] && data[i][j] > data[(i + 1) % rows][j] && data[i][j] > data[i][(j - 1 + cols) % cols] && data[i][j] > data[i][(j + 1) % cols]) {
 				result[i][j] = true;
-				cnt_true++;
+				//cnt_true++;
 			}
 		}
 	}
-	printf("%d\n", cnt_true);
+	//printf("%d\n", cnt_true);
 	
 	return;
 }

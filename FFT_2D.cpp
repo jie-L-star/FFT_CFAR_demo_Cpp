@@ -53,7 +53,7 @@ void FFT_1D(std::vector<Complex>& input) {
 }
 
 
-// 二维FFT变换
+// 2维FFT变换
 void FFT_2D(std::vector<std::vector<Complex>>& s) {
     int QNum = s[0].size();    //行
     int SNum = s.size();       //列
@@ -96,4 +96,33 @@ void FFT_2D(std::vector<std::vector<Complex>>& s) {
     s.erase(s.end() - 286, s.end());
     for (int i = 0; i < s.size(); i++)
         s[i].resize(65);
+}
+
+
+// 1维IFFT函数
+// 执行一维FFT并返回复数结果向量
+void IFFT_1D(std::vector<Complex>& input) {
+    int N = input.size();
+    fftw_complex* in = fftw_alloc_complex(N);
+    fftw_complex* out = fftw_alloc_complex(N);
+
+    // 复制输入数据到FFTW复数数组
+    for (int i = 0; i < N; ++i) {
+        in[i][0] = input[i].real();
+        in[i][1] = input[i].imag();
+    }
+
+    // 创建计划并执行FFT
+    fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_execute(plan);
+
+    for (int i = 0; i < N; ++i) {
+        input[i] = Complex(out[i][0]/N, out[i][1]/N);
+    }
+    // 清理
+    fftw_destroy_plan(plan);
+    fftw_free(in);
+    fftw_free(out);
+
+    return;
 }

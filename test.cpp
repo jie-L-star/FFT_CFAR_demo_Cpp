@@ -1,30 +1,18 @@
-#include <Eigen/Dense>
-#include <complex>
-#include <vector>
-#include <main.h>
+#include <test.h>
 
 
-// 二维vector矩阵相乘
-std::vector<std::vector<Complex>> multiplyVectors_eigen(const std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB) {
-
-    int rowsA = vecA.size();
-    int colsA = vecA[0].size();
-    int rowsB = vecB.size();
-    int colsB = vecB[0].size();
-
-    // 创建Eigen的Map视图
-    Eigen::Map<const Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenA(&vecA[0][0], rowsA, colsA);
-    Eigen::Map<Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenB(&vecB[0][0], rowsB, colsB); // 注意这里colsA对应于行数
+std::vector<std::vector<Complex>> multiplyVectors_eigen_map(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB) {
+    // 将二维向量映射到Eigen矩阵
+    Eigen::Map<Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenA(vecA[0].data(), vecA.size(), vecA[0].size());
+    Eigen::Map<Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> eigenB(vecB[0].data(), vecB.size(), vecB[0].size());
 
     // 执行矩阵乘法
-    //eigenB = eigenB.transposeInPlace();
-    Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> result = eigenA * (eigenB.transpose());
-    //Eigen::MatrixXcf result = eigenA * (eigenB.transpose());
-    //auto result = eigenA * (eigenB.transpose());
+    Eigen::MatrixXcf result = (eigenA.transpose()) * (eigenB.transpose());
 
+    // 将结果复制回二维向量
     for (int i = 0; i < result.rows(); ++i) {
         for (int j = 0; j < result.cols(); ++j) {
-            vecB[i][j] = result(i, j);
+            vecB[j][i] = result(i, j);
         }
     }
 
@@ -32,20 +20,32 @@ std::vector<std::vector<Complex>> multiplyVectors_eigen(const std::vector<std::v
 }
 
 
-
 // 二维vector矩阵相乘
-std::vector<std::vector<Complex>> multiplyVectors(const std::vector<std::vector<Complex>>& matrixA, const std::vector<std::vector<Complex>>& matrixB) {
-    assert(matrixA[0].size() == matrixB.size()); // 确保矩阵乘法合法
+std::vector<std::vector<Complex>> multiplyVectors_eigen(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB) {
 
-    std::vector<std::vector<Complex>> result(matrixA.size(), std::vector<Complex>(matrixB[0].size()));
+    Eigen::MatrixXcf eigenA = vectorToMatrix(vecA);
+    Eigen::MatrixXcf eigenB = vectorToMatrix(vecB);
+   
+    Eigen::MatrixXcf result = (eigenA.transpose()) * (eigenB.transpose());
 
-    for (size_t i = 0; i < matrixA.size(); ++i) {
-        for (size_t j = 0; j < matrixB[0].size(); ++j) {
-            for (size_t k = 0; k < matrixA[0].size(); ++k) {
-                result[i][j] += matrixA[i][k] * matrixB[k][j];
-            }
+    for (int i = 0; i < result.rows(); ++i) {
+        for (int j = 0; j < result.cols(); ++j) {
+            vecB[j][i] = result(i, j);
         }
     }
 
-    return result;
+    return vecB;
+}
+
+
+Eigen::MatrixXcf vectorToMatrix(const std::vector<std::vector<Complex>>& vec) {
+    int rows = vec.size();
+    int cols = vec[0].size();
+
+    Eigen::MatrixXcf matrix(rows, cols);
+    for (int i = 0; i < rows; ++i)
+        for (int j = 0; j < cols; ++j)
+            matrix(i, j) = vec[i][j];
+
+    return matrix;
 }

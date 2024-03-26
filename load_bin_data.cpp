@@ -5,37 +5,17 @@
 #include <load_data.h>
 #include <matlab_function.h>
 #include <complex.h>
-//#include <Eigen\src\QR\ColPivHouseholderQR.h>
-
+#include <FFT_2D.h>
 
 const std::wstring L_PATH_DIR_GNB_95 = L"D:/干活/MATLAB-C++/FFT_CFAR_demo/datareal/95/013/";
 const std::wstring L_PATH_DIR_GNB_96 = L"D:/干活/MATLAB-C++/FFT_CFAR_demo/datareal/96/013/";
 const std::string PATH_DIR_GNB_95 = "D:/干活/MATLAB-C++/FFT_CFAR_demo/datareal/95/013/";
 const std::string PATH_DIR_GNB_96 = "D:/干活/MATLAB-C++/FFT_CFAR_demo/datareal/96/013/";
 
-const int nRxAnt1 = 2;
-const int nRxAnt2 = 6;
-const int nTxAnts = 1;
-const int Nfft = 2048;
-const int nRxAnts = nRxAnt1 + nRxAnt2;
-const int nSC = 1584;
-const int LengthFiles = 9600;
-
-const float tau_max = 1.2e-6;
-const int SCS = 1.2e5;
-const int CombMax = 8;
-const int nComb = 2;
-const int nAntPerRRU = 2;
-const int nCsStep = 4;
-const int Mzc = 132 * 12 / nComb;
-const int cr_win = floor(nSC / nComb / (CombMax / nCsStep));
-const int win_len = cr_win / 2;
 std::vector<int> sc_idx = maohao<int>(-(nSC / 2), (nSC / 2) - 1, 1);
 
+void load_bin_data(std::vector<std::vector<std::vector<Complex>>>& crs_rx_Iq_slot_ant) {
 
-std::vector<std::vector<std::vector<Complex>>> load_bin_data(void) {
-
-    std::vector<std::vector<std::vector<Complex>>> crs_rx_Iq_slot_ant(nRxAnts, std::vector<std::vector<Complex>>(LengthFiles));
     std::vector<Complex> socketdata(LengthFiles);
 
     std::vector<std::string> file_Names_1 = listFilesInDirectory(L_PATH_DIR_GNB_95, PATH_DIR_GNB_95);
@@ -44,40 +24,26 @@ std::vector<std::vector<std::vector<Complex>>> load_bin_data(void) {
     for (int islot = 0; islot < LengthFiles; ++islot) {
         socketdata = func_readbin(file_Names_1[islot]);
         crs_rx_Iq_slot_ant[0][islot].insert(crs_rx_Iq_slot_ant[0][islot].begin(), socketdata.begin(), socketdata.begin() + nSC);
-        //crs_rx_Iq_slot_ant[1][islot].insert(crs_rx_Iq_slot_ant[1][islot].begin(), socketdata.begin() + nSC, socketdata.end());
+        crs_rx_Iq_slot_ant[1][islot].insert(crs_rx_Iq_slot_ant[1][islot].begin(), socketdata.begin() + nSC, socketdata.end());
 
-        //socketdata = func_readbin(file_Names_2[islot]);
-        //crs_rx_Iq_slot_ant[2][islot].insert(crs_rx_Iq_slot_ant[2][islot].begin(), socketdata.begin(), socketdata.begin() + nSC);
-        //crs_rx_Iq_slot_ant[3][islot].insert(crs_rx_Iq_slot_ant[3][islot].begin(), socketdata.begin() + nSC, socketdata.begin() + nSC * 2);
-        //crs_rx_Iq_slot_ant[4][islot].insert(crs_rx_Iq_slot_ant[4][islot].begin(), socketdata.begin() + 2 * nSC, socketdata.begin() + nSC * 3);
-        //crs_rx_Iq_slot_ant[5][islot].insert(crs_rx_Iq_slot_ant[5][islot].begin(), socketdata.begin() + 3 * nSC, socketdata.begin() + nSC * 4);
-        //crs_rx_Iq_slot_ant[6][islot].insert(crs_rx_Iq_slot_ant[6][islot].begin(), socketdata.begin() + 4 * nSC, socketdata.begin() + nSC * 5);
-        //crs_rx_Iq_slot_ant[7][islot].insert(crs_rx_Iq_slot_ant[7][islot].begin(), socketdata.begin() + 5 * nSC, socketdata.begin() + nSC * 6);
+        socketdata = func_readbin(file_Names_2[islot]);
+        crs_rx_Iq_slot_ant[2][islot].insert(crs_rx_Iq_slot_ant[2][islot].begin(), socketdata.begin(), socketdata.begin() + nSC);
+        crs_rx_Iq_slot_ant[3][islot].insert(crs_rx_Iq_slot_ant[3][islot].begin(), socketdata.begin() + nSC, socketdata.begin() + nSC * 2);
+        crs_rx_Iq_slot_ant[4][islot].insert(crs_rx_Iq_slot_ant[4][islot].begin(), socketdata.begin() + 2 * nSC, socketdata.begin() + nSC * 3);
+        crs_rx_Iq_slot_ant[5][islot].insert(crs_rx_Iq_slot_ant[5][islot].begin(), socketdata.begin() + 3 * nSC, socketdata.begin() + nSC * 4);
+        crs_rx_Iq_slot_ant[6][islot].insert(crs_rx_Iq_slot_ant[6][islot].begin(), socketdata.begin() + 4 * nSC, socketdata.begin() + nSC * 5);
+        crs_rx_Iq_slot_ant[7][islot].insert(crs_rx_Iq_slot_ant[7][islot].begin(), socketdata.begin() + 5 * nSC, socketdata.begin() + nSC * 6);
     }
 
-    std::vector<std::vector<std::vector<Complex>>> W_combmax8 = load_data(2, 792, 792, "D:/干活/MATLAB-C++/FFT_CFAR_demo/datareal/W_combmax8.csv");
+    socketdata.clear();
 
-    ChannelEstimation(crs_rx_Iq_slot_ant, W_combmax8);
-
-    return crs_rx_Iq_slot_ant;
 }
 
-
-void ChannelEstimation(std::vector<std::vector<std::vector<Complex>>>&crs_rx_Iq_slot_ant, std::vector<std::vector<std::vector<Complex>>>& W_combmax8) {
-    // 共轭保证
-    const int combOffset = 0;
-    double angle = 0;
-    const Complex MY_Complex_I(0.0, 1.0);
-
-    int nSlot = LengthFiles;
+void Pre_load(std::vector<std::vector<Complex>> &root_seq_slot_temp, std::vector<std::vector<Complex>> &crs_temp) {
     std::vector<Complex> root_seq_slot = SrsSeqGen(Mzc, 0, 0);
     for (auto& val : root_seq_slot) {
         val = conj(val);
     }
-
-    std::vector<std::vector<Complex>> root_seq_slot_temp(nTxAnts, std::vector<Complex>(nSC / 2));
-    std::vector<std::vector<std::vector<std::vector<Complex>>>> crs_ce_slot_rx_tx(nTxAnts, std::vector<std::vector<std::vector<Complex>>>(nRxAnts, std::vector<std::vector<Complex>>(nSlot, std::vector<Complex>(nSC / 2))));
-    std::vector<std::vector<Complex>> crs_temp(2, std::vector<Complex>(nSC / 2));
 
     for (int iTx = 0; iTx < nTxAnts; ++iTx) {
         for (int i = 0; i < nSC / 2; ++i) {
@@ -89,32 +55,30 @@ void ChannelEstimation(std::vector<std::vector<std::vector<Complex>>>&crs_rx_Iq_
         crs_temp[0][i] = std::polar(1.0, 2 * M_PI * 0.4 * tau_max * SCS * sc_idx[2 * i]);
         crs_temp[1][i] = std::polar(1.0, -2 * M_PI * 0.4 * tau_max * SCS * sc_idx[2 * i]);
     }
+}
 
+std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vector<Complex>>>&crs_rx_Iq_slot_ant, pre_load_struct& pre_load_data) {
 
-    std::vector<std::vector<Complex>> crs_mmse_ce_slot_ant(nSlot, std::vector<Complex>(nSC / 2));
-    //Eigen::Map<Eigen::MatrixXd>(W_combmax8.data(), W_combmax8.size(), W_combmax8[0].size());
+    std::vector<std::vector<Complex>> crs_mmse_ce_slot_ant(pre_load_data.nSlot, std::vector<Complex>(nSC / 2));
 
-    //MatrixXcd crs_mmse_ce_slot_ant(nSlot, nSC / 2);
     for (int iRx = 0; iRx < nRxAnts; ++iRx) {
         for (int iTx = 0; iTx < nTxAnts; ++iTx) {
-
-            //MatrixXcd W_matrix = reinterpret_cast<Complex>(W_combmax8.data(), W_combmax8.size(), W_combmax8[0].size());
-
-            for (int i = 0; i < nSlot; ++i) {
+            for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[iRx][i][2 * j] * crs_temp[0][j] / root_seq_slot_temp[iTx][j];
+                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[iRx][i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
                 }
             }
+            multiplyVectors_eigen(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
 
-            multiplyVectors(W_combmax8[0], crs_mmse_ce_slot_ant);
+            for (int i = 0; i < pre_load_data.nSlot; ++i) {
+                for (int j = 0; j < nSC / 2; ++j) {
+                    crs_mmse_ce_slot_ant[i][j] = crs_mmse_ce_slot_ant[i][j] * pre_load_data.crs_temp[1][j];
+                }
+                IFFT_1D(crs_mmse_ce_slot_ant[i]);
+                std::rotate(crs_mmse_ce_slot_ant[i].begin(), crs_mmse_ce_slot_ant[i].end() - 10, crs_mmse_ce_slot_ant[i].end());
+            }
 
-            //Eigen::Map<Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> crs_mmse_ce_slot_ant_matrix(&crs_mmse_ce_slot_ant[0][0], crs_mmse_ce_slot_ant.size(), crs_mmse_ce_slot_ant[0].size());
-            //Eigen::Map<Eigen::Matrix<Complex, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>> W_combmax8_matrix(&W_combmax8[0][0][0], W_combmax8[0].size(), W_combmax8[0][0].size());
-
-            //crs_mmse_ce_slot_ant_matrix = W_combmax8_matrix * crs_mmse_ce_slot_ant_matrix;
-            /*crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][iTx] = crs_mmse_ce_slot_ant;
-            crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][iTx] = ifft(crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][txAnt]);
-            crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][iTx] = { crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][txAnt].end() - 10, crs_ce_slot_rx_tx[(iTx - 1) * nCsStep][combOffset + 1][iRx][txAnt].end(), iRx, txAnt };*/
+            return crs_mmse_ce_slot_ant;
         }
     }
 }

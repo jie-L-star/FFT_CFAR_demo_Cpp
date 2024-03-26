@@ -13,26 +13,9 @@
 * load_bin_data.cpp 读取bin文件
 */
 
-//void test(void){
-//    const int n = 1000;
-//    std::vector<std::vector<Complex>> A(n, std::vector<Complex>(n));
-//    std::vector<std::vector<Complex>> B(n, std::vector<Complex>(n));
-//
-//    multiplyVectors_eigen(A, B);
-//}
-
-
 int main() {
 
-    //test();
-    //load_bin_data();
-
     clock_t start_time = clock();
-
-    //std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14.csv";
-    //const int dim1 = 8;     // 第一维大小 通道(8个)
-    //const int dim2 = 9600;  // 第二维大小 时域(慢时间)
-    //const int dim3 = 792;   // 第三维大小 频域(快时间)
 
     std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6.csv";
     const int dim1 = 1;     // 第一维大小 通道(8个)
@@ -53,7 +36,6 @@ int main() {
     std::vector<std::vector<Complex>> Receive;
     std::vector<std::vector<std::vector<Complex>>> Result_fft(t_length, std::vector<std::vector<Complex>>(velocity_index_size, std::vector<Complex>(range_index_size)));
 
-    //共轭在采集数据时实现
     for (int i = 0; i < dim1; ++i) {
         for (int j = 0; j < dim2; ++j) {
             FFT_1D(threeDArray[i][j]);
@@ -96,5 +78,3 @@ int main() {
 
     return 0;
 }
-
- 
