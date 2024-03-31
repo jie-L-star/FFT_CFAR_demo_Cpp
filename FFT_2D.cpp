@@ -91,11 +91,12 @@ void FFT_2D(std::vector<std::vector<Complex>>& s) {
 
     fftshift(s);
 
-    //切片 0~50m,-2m/s~2m/s
-    s.erase(s.begin(), s.begin() + 287);
-    s.erase(s.end() - 286, s.end());
-    for (int i = 0; i < s.size(); i++)
-        s[i].resize(65);
+    ////切片 0~50m,-2m/s~2m/s
+    //s.erase(s.begin(), s.begin() + 287);
+    //s.erase(s.end() - 286, s.end());
+    //for (int i = 0; i < s.size(); i++)
+    //    s[i].resize(65);
+
 }
 
 

@@ -6,7 +6,7 @@ const int nTxAnts = 1;
 const int Nfft = 2048;
 const int nRxAnts = nRxAnt1 + nRxAnt2;
 const int nSC = 1584;
-const int LengthFiles = 1000;
+const int LengthFiles = 9600;
 
 const float tau_max = 1.2e-6;
 const int SCS = 1.2e5;
@@ -29,7 +29,7 @@ struct pre_load_struct {
         : nSlot(LengthFiles),
         root_seq_slot_temp(nTxAnts, std::vector<Complex>(nSC / 2)),
         crs_temp(2, std::vector<Complex>(nSC / 2)),
-        W_combmax8(2, std::vector<std::vector<Complex>>(792, std::vector<Complex>(792))){}
+        W_combmax8(2, std::vector<std::vector<Complex>>(nSC / 2, std::vector<Complex>(nSC / 2))){}
 };
 
 
@@ -44,3 +44,6 @@ std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vecto
 
 std::vector<std::vector<Complex>> multiplyVectors_eigen_map(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB);
 std::vector<std::vector<Complex>> multiplyVectors_eigen(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB);
+std::vector<std::vector<Complex>> multiplyVectors_Armadillo(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB);
+
+void test(void);

@@ -65,14 +65,16 @@ std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vecto
         for (int iTx = 0; iTx < nTxAnts; ++iTx) {
             for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[iRx][i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
+                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[5][i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
                 }
             }
-            multiplyVectors_eigen(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
+            //multiplyVectors_eigen(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
+            multiplyVectors_Armadillo(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
 
             for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    crs_mmse_ce_slot_ant[i][j] = crs_mmse_ce_slot_ant[i][j] * pre_load_data.crs_temp[1][j];
+                    //crs_mmse_ce_slot_ant[i][j] = crs_mmse_ce_slot_ant[i][j] * pre_load_data.crs_temp[1][j];
+                    crs_mmse_ce_slot_ant[i][j] *= pre_load_data.crs_temp[1][j];
                 }
                 IFFT_1D(crs_mmse_ce_slot_ant[i]);
                 std::rotate(crs_mmse_ce_slot_ant[i].begin(), crs_mmse_ce_slot_ant[i].end() - 10, crs_mmse_ce_slot_ant[i].end());

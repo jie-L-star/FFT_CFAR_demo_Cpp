@@ -1,4 +1,20 @@
-#include <test.h>
+#include <Eigen/Core>
+#include <complex>
+#include <vector>
+#include <main.h>
+
+
+Eigen::MatrixXcf vectorToMatrix(const std::vector<std::vector<Complex>>& vec) {
+    int rows = vec.size();
+    int cols = vec[0].size();
+
+    Eigen::MatrixXcf matrix(rows, cols);
+    for (int i = 0; i < rows; ++i)
+        for (int j = 0; j < cols; ++j)
+            matrix(i, j) = vec[i][j];
+
+    return matrix;
+}
 
 
 std::vector<std::vector<Complex>> multiplyVectors_eigen_map(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB) {
@@ -35,17 +51,4 @@ std::vector<std::vector<Complex>> multiplyVectors_eigen(std::vector<std::vector<
     }
 
     return vecB;
-}
-
-
-Eigen::MatrixXcf vectorToMatrix(const std::vector<std::vector<Complex>>& vec) {
-    int rows = vec.size();
-    int cols = vec[0].size();
-
-    Eigen::MatrixXcf matrix(rows, cols);
-    for (int i = 0; i < rows; ++i)
-        for (int j = 0; j < cols; ++j)
-            matrix(i, j) = vec[i][j];
-
-    return matrix;
 }

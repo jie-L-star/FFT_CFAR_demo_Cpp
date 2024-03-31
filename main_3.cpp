@@ -6,14 +6,9 @@
 #include <CFAR.h>
 #include <time.h>
 
-/*
-* main.cpp 主函数，单线程读取并处理，结果和MATLAB通道6一致
-* main_2.cpp 主函数，尝试双线程，仅读取1*1000*792共计15次，耗时较长，还需要更改
-* FileName.cpp 用boost库读取数据，效果不变
-* load_bin_data.cpp 读取bin文件
-*/
-
 int main() {
+
+    //test();
 
     clock_t start_time = clock();
 
@@ -26,14 +21,18 @@ int main() {
     
     std::vector<std::vector<Complex>> data;
     CFAR_result my_result;
-    std::vector<std::vector<float>> data_abs(velocity_index_size, std::vector<float>(range_index_size));
+    //std::vector<std::vector<float>> data_abs(velocity_index_size, std::vector<float>(range_index_size));
+    std::vector<std::vector<float>> data_abs(1000, std::vector<float>(792));
 
     std::cout << "预加载耗时: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
 
     while (1) {
+        start_time = clock();
+        
+        //需要将crs_rx_Iq_slot_ant换为数据包，收集 LengthFiles 个便可以进行预处理，在load_bin_data.h中更改
         data = Pre_process(crs_rx_Iq_slot_ant, pre_load_data);
 
-        std::cout << "end_Pre_process: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
+        std::cout << "end_Pre_process: " << (clock() - start_time) << "ms" << std::endl;
 
         for (int j = 0; j < LengthFiles; ++j) {
             FFT_1D(data[j]);
@@ -43,12 +42,12 @@ int main() {
 
         FFT_2D(data);
 
-        for (int i = 0; i < velocity_index_size; i++)
-            for (int j = 0; j < range_index_size; j++)
+        for (int i = 0; i < data.size(); i++)
+            for (int j = 0; j < data[0].size(); j++)
                 data_abs[i][j] = pow(std::abs(data_abs[i][j]), 2);
 
         my_result = CFAR(data_abs);
-        std::cout << "end: " << (clock() - start_time) / 1000.0 << "s" << std::endl;
+        std::cout << "end: " << (clock() - start_time) << "ms" << std::endl;
     }
 
     return 0;
