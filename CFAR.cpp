@@ -9,7 +9,7 @@
 #define	Nc_R_Gap	3
 #define	Nc_V_Gap	10
 #define	NfftRLeft	1
-#define NfftRRight	50
+#define NfftRRight	30
 #define PfN			1e-8
 
 CFAR_result CFAR(std::vector<std::vector<float>>& s) {
@@ -57,10 +57,14 @@ CFAR_result CFAR(std::vector<std::vector<float>>& s) {
 			if (check_around[j][i] == false)
 				continue;
 
+			if (i == 15 && j == 391)
+				std::cout << "hello" << std::endl;
+
+
 			for (int r : temp_Rsize_1) ReferenceR1.push_back(s[j][r]);
 			for (int r : temp_Rsize_2) ReferenceR2.push_back(s[j][r]);
 			for (int r : temp_Vsize_1[j]) ReferenceV1.push_back(s[r][i]);
-			for (int r : temp_Vsize_1[j]) ReferenceV2.push_back(s[r][i]);
+			for (int r : temp_Vsize_2[j]) ReferenceV2.push_back(s[r][i]);
 
 			NoisePowerR = findMedian(ReferenceR1, ReferenceR2);
 			NoisePowerV = findMedian(ReferenceV1, ReferenceV2);
@@ -130,23 +134,6 @@ bool CFARHelper2(std::vector<std::vector<float>> data, int x, int y, int Xmax, i
 	return flag;
 }
 
-
-//std::vector<int> CFARHelper3(std::vector<int> vec, int Nmax) {
-//	auto item = vec.begin();
-//	std::vector<int> temp;
-//
-//	while (item != vec.end())
-//	{
-//		if (!(*item < 0 || *item > Nmax-1)) {
-//			temp.push_back(*item);
-//		}
-//
-//		item++;
-//	}
-//
-//	return temp;
-//}
-
 std::vector<int> CFARHelper3(std::vector<int> vec, int Nmax) {
 	vec.erase(std::remove_if(vec.begin(), vec.end(),[Nmax](int x) { return x < 0 || x > Nmax-1; }), vec.end());
 	return vec;
@@ -173,7 +160,7 @@ float findMedian(std::vector<float>& nums1, std::vector<float>& nums2) {
 void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::vector<std::vector<bool>> &result) {
 	int rows = data.size();
 	int cols = data[0].size();
-	//int cnt_true = 0;
+	int cnt_true = 0;
 	// 初始化结果矩阵，全部设为false
 
 	// 遍历矩阵中的每个元素
@@ -181,11 +168,11 @@ void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::v
 		for (int j = 0; j < result[0].size(); ++j) {
 			if (data[i][j] > data[(i - 1 + rows) % rows][j] && data[i][j] > data[(i + 1) % rows][j] && data[i][j] > data[i][(j - 1 + cols) % cols] && data[i][j] > data[i][(j + 1) % cols]) {
 				result[i][j] = true;
-				//cnt_true++;
+				cnt_true++;
 			}
 		}
 	}
-	//printf("%d\n", cnt_true);
+	printf("%d\n", cnt_true);
 	
 	return;
 }

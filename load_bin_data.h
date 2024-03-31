@@ -6,7 +6,8 @@ const int nTxAnts = 1;
 const int Nfft = 2048;
 const int nRxAnts = nRxAnt1 + nRxAnt2;
 const int nSC = 1584;
-const int LengthFiles = 9600;
+//收集数据包个数
+const int LengthFiles = 1000;
 
 const float tau_max = 1.2e-6;
 const int SCS = 1.2e5;
