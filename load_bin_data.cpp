@@ -57,7 +57,7 @@ void Pre_load(std::vector<std::vector<Complex>> &root_seq_slot_temp, std::vector
     }
 }
 
-std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vector<Complex>>>&crs_rx_Iq_slot_ant, pre_load_struct& pre_load_data) {
+std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<Complex>>&crs_rx_Iq_slot_ant, pre_load_struct& pre_load_data) {
 
     std::vector<std::vector<Complex>> crs_mmse_ce_slot_ant(pre_load_data.nSlot, std::vector<Complex>(nSC / 2));
 
@@ -65,7 +65,7 @@ std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vecto
         for (int iTx = 0; iTx < nTxAnts; ++iTx) {
             for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[5][i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
+                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
                 }
             }
             //multiplyVectors_eigen(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);

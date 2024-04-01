@@ -57,10 +57,6 @@ CFAR_result CFAR(std::vector<std::vector<float>>& s) {
 			if (check_around[j][i] == false)
 				continue;
 
-			if (i == 15 && j == 391)
-				std::cout << "hello" << std::endl;
-
-
 			for (int r : temp_Rsize_1) ReferenceR1.push_back(s[j][r]);
 			for (int r : temp_Rsize_2) ReferenceR2.push_back(s[j][r]);
 			for (int r : temp_Vsize_1[j]) ReferenceV1.push_back(s[r][i]);
@@ -160,7 +156,7 @@ float findMedian(std::vector<float>& nums1, std::vector<float>& nums2) {
 void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::vector<std::vector<bool>> &result) {
 	int rows = data.size();
 	int cols = data[0].size();
-	int cnt_true = 0;
+	//int cnt_true = 0;
 	// 初始化结果矩阵，全部设为false
 
 	// 遍历矩阵中的每个元素
@@ -168,11 +164,11 @@ void compareAdjacentElements(const std::vector<std::vector<float>>& data, std::v
 		for (int j = 0; j < result[0].size(); ++j) {
 			if (data[i][j] > data[(i - 1 + rows) % rows][j] && data[i][j] > data[(i + 1) % rows][j] && data[i][j] > data[i][(j - 1 + cols) % cols] && data[i][j] > data[i][(j + 1) % cols]) {
 				result[i][j] = true;
-				cnt_true++;
+				//cnt_true++;
 			}
 		}
 	}
-	printf("%d\n", cnt_true);
+	//printf("%d\n", cnt_true);
 	
 	return;
 }

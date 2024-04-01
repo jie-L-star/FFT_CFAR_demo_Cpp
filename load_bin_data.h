@@ -41,7 +41,7 @@ std::string wstring2String(const std::wstring& wstr);
 std::vector<Complex> SrsSeqGen(int M_zc, int u, int v);
 
 void Pre_load(std::vector<std::vector<Complex>>& root_seq_slot_temp, std::vector<std::vector<Complex>>& crs_temp);
-std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<std::vector<Complex>>>& crs_rx_Iq_slot_ant, pre_load_struct& pre_load_data);
+std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<Complex>>& crs_rx_Iq_slot_ant, pre_load_struct& pre_load_data);
 
 std::vector<std::vector<Complex>> multiplyVectors_eigen_map(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB);
 std::vector<std::vector<Complex>> multiplyVectors_eigen(std::vector<std::vector<Complex>>& vecA, std::vector<std::vector<Complex>>& vecB);
