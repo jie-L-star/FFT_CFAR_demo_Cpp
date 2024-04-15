@@ -115,6 +115,19 @@ std::vector<Complex> func_readbin(const std::string& filepath) {
     return readOut;
 }
 
+std::vector<Complex> func_bin2complex(int16_t data_bin[], int size) {
+
+    // 解析数据
+    std::vector<Complex> readOut;
+    readOut.reserve(size / sizeof(short) / 2); // 每个复数由两个 short 组成
+
+    short* dataPtr = reinterpret_cast<short*>(data_bin);
+    for (size_t i = 0; i < size / sizeof(short); i += 2) {
+        readOut.emplace_back(dataPtr[i], -dataPtr[i + 1]);  //共轭在此实现
+    }
+
+    return readOut;
+}
 
 std::vector<std::string> listFilesInDirectory(const std::wstring& folderPath, const std::string& my_folderPath) {
     WIN32_FIND_DATA findFileData;

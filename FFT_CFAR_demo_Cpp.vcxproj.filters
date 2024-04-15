@@ -45,6 +45,9 @@
     <ClCompile Include="test_Armadillo .cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="receivers.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT_2D.h">
@@ -63,6 +66,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="load_bin_data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="receivers.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

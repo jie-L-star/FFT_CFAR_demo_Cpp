@@ -140,7 +140,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\stage\lib;D:\FFT_CFAR_demo_Cpp\packages\bin;D:\FFT_CFAR_demo_Cpp\packages\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;libopenblas.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;libopenblas.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>10000000000</StackReserveSize>
       <Profile>true</Profile>
     </Link>
@@ -189,6 +189,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="receivers.c" />
     <ClCompile Include="test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -201,6 +202,7 @@
     <ClInclude Include="load_data.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="matlab_function.h" />
+    <ClInclude Include="receivers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
