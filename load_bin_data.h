@@ -36,7 +36,7 @@ struct pre_load_struct {
 
 void load_bin_data(std::vector<std::vector<std::vector<Complex>>>& crs_rx_Iq_slot_ant);
 std::vector<Complex> func_readbin(const std::string& filepath);
-std::vector<Complex> func_bin2complex(int16_t data_bin[], int size);
+void func_bin2complex(int16_t data_bin[], int size, std::vector<std::vector<std::vector<Complex>>>& data_tune);
 std::vector<std::string> listFilesInDirectory(const std::wstring& folderPath, const std::string& my_folderPath);
 std::string wstring2String(const std::wstring& wstr);
 std::vector<Complex> SrsSeqGen(int M_zc, int u, int v);

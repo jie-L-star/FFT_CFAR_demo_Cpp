@@ -4,6 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <math.h>
+#include <numeric>
+#include <iterator>
 
 #define Ts		(0.625e-3)
 #define c0		(3e+8)
@@ -24,7 +26,6 @@
 #define velocity_index_size	((int)(velocity_index_max-velocity_index_min+1))
 
 #define M_PI acos(-1)
-
 
 // 简化的复数定义（基于标准库）
 using Complex = std::complex<float>;

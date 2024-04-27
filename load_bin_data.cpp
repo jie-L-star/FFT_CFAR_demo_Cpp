@@ -61,28 +61,26 @@ std::vector<std::vector<Complex>> Pre_process(std::vector<std::vector<Complex>>&
 
     std::vector<std::vector<Complex>> crs_mmse_ce_slot_ant(pre_load_data.nSlot, std::vector<Complex>(nSC / 2));
 
-    for (int iRx = 0; iRx < nRxAnts; ++iRx) {
-        for (int iTx = 0; iTx < nTxAnts; ++iTx) {
+    //for (int iRx = 0; iRx < nRxAnts; ++iRx) {
+    //    for (int iTx = 0; iTx < nTxAnts; ++iTx) {
             for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
+                    //crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[iTx][j];
+                    crs_mmse_ce_slot_ant[i][j] = crs_rx_Iq_slot_ant[i][2 * j] * pre_load_data.crs_temp[0][j] / pre_load_data.root_seq_slot_temp[0][j];
                 }
             }
-            //multiplyVectors_eigen(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
             multiplyVectors_Armadillo(pre_load_data.W_combmax8[0], crs_mmse_ce_slot_ant);
 
             for (int i = 0; i < pre_load_data.nSlot; ++i) {
                 for (int j = 0; j < nSC / 2; ++j) {
-                    //crs_mmse_ce_slot_ant[i][j] = crs_mmse_ce_slot_ant[i][j] * pre_load_data.crs_temp[1][j];
                     crs_mmse_ce_slot_ant[i][j] *= pre_load_data.crs_temp[1][j];
                 }
                 IFFT_1D(crs_mmse_ce_slot_ant[i]);
                 std::rotate(crs_mmse_ce_slot_ant[i].begin(), crs_mmse_ce_slot_ant[i].end() - 10, crs_mmse_ce_slot_ant[i].end());
             }
-
             return crs_mmse_ce_slot_ant;
-        }
-    }
+    //    }
+    //}
 }
 
 
@@ -115,18 +113,25 @@ std::vector<Complex> func_readbin(const std::string& filepath) {
     return readOut;
 }
 
-std::vector<Complex> func_bin2complex(int16_t data_bin[], int size) {
-
+void func_bin2complex(int16_t data_bin[], int size, std::vector<std::vector<std::vector<Complex>>>& data_tune) {
+   
+    std::vector<Complex> data_complex;
     // 解析数据
-    std::vector<Complex> readOut;
-    readOut.reserve(size / sizeof(short) / 2); // 每个复数由两个 short 组成
+    data_complex.reserve(size / sizeof(short) / 2); // 每个复数由两个 short 组成
 
     short* dataPtr = reinterpret_cast<short*>(data_bin);
     for (size_t i = 0; i < size / sizeof(short); i += 2) {
-        readOut.emplace_back(dataPtr[i], -dataPtr[i + 1]);  //共轭在此实现
+        data_complex.emplace_back(dataPtr[i], -dataPtr[i + 1]);  //共轭在此实现
     }
 
-    return readOut;
+    int ant_length = data_tune.size();
+    int file_size = data_tune[0].size();
+
+    for (int i = 0; i < file_size; i++)
+        for (int j = 0; j < ant_length; j++)
+            data_tune[j][i] = std::vector<Complex>(data_complex.begin() + (ant_length * i + j) * nSC,
+                data_complex.begin() + (ant_length * i + j + 1) * nSC);
+    std::cout << "data_tune_size: " << sizeof(data_tune) << std::endl;
 }
 
 std::vector<std::string> listFilesInDirectory(const std::wstring& folderPath, const std::string& my_folderPath) {

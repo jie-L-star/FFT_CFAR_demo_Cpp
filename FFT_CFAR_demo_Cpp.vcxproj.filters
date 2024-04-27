@@ -48,6 +48,12 @@
     <ClCompile Include="receivers.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="my_plot.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="image2gif.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FFT_2D.h">
@@ -69,6 +75,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="receivers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="my_plot.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

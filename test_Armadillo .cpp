@@ -42,14 +42,3 @@ std::vector<std::vector<Complex>> multiplyVectors_Armadillo(std::vector<std::vec
 
     return vecB;
 }
-
-void test(void) {
-    const int N = 1000;
-    // Éú³ÉËæ»ú¾ØÕó
-    auto vecA = generateRandomVector(N, N);
-    auto vecB = generateRandomVector(N, N);
-
-    multiplyVectors_Armadillo(vecA, vecB);
-
-    return;
-}

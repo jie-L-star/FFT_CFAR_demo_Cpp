@@ -75,7 +75,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\visual studio 2019\libs\boost_1_83_0;D:\FFT_CFAR_demo_Cpp;E:\git\armadillo-12.8.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\lib;D:\FFT_CFAR_demo_Cpp\packages\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\lib;D:\Pycharm\miniconda3\libs;D:\FFT_CFAR_demo_Cpp\packages\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,10 +99,13 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>D:\FFT_CFAR_demo_Cpp;D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\include;;D:\Pycharm\miniconda3\include;D:\Pycharm\miniconda3\Lib\site-packages\numpy\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Pycharm\miniconda3\libs;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);python3.lib;python39.lib;_tkinter.lib;python39_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -116,12 +119,15 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>D:\FFT_CFAR_demo_Cpp;D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\include;;D:\Pycharm\miniconda3\include;D:\Pycharm\miniconda3\Lib\site-packages\numpy\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Pycharm\miniconda3\libs;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);python3.lib;python39.lib;_tkinter.lib;python39_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,17 +136,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\git\armadillo-12.8.1\include;D:\FFT_CFAR_demo_Cpp\packages\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\FFT_CFAR_demo_Cpp;D:\Pycharm\miniconda3\include;D:\Pycharm\miniconda3\Lib\site-packages\numpy\core\include;E:\git\armadillo-12.8.1\include;D:\FFT_CFAR_demo_Cpp\packages\include;%(AdditionalIncludeDirectories);D:\Pycharm\miniconda3\include;D:\Pycharm\miniconda3\Lib\site-packages\numpy\core\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <DiagnosticsFormat>Classic</DiagnosticsFormat>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\stage\lib;D:\FFT_CFAR_demo_Cpp\packages\bin;D:\FFT_CFAR_demo_Cpp\packages\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;libopenblas.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Pycharm\miniconda3\libs;E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\stage\lib;D:\FFT_CFAR_demo_Cpp\packages\bin;D:\FFT_CFAR_demo_Cpp\packages\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfftw3-3.lib;libfftw3f-3.lib;libfftw3l-3.lib;libopenblas.lib;ws2_32.lib;%(AdditionalDependencies);python3.lib;python39.lib;_tkinter.lib;python39_d.lib</AdditionalDependencies>
       <StackReserveSize>10000000000</StackReserveSize>
       <Profile>true</Profile>
     </Link>
@@ -156,12 +164,15 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>D:\FFT_CFAR_demo_Cpp;D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64\include;;D:\Pycharm\miniconda3\include;D:\Pycharm\miniconda3\Lib\site-packages\numpy\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Pycharm\miniconda3\libs;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);python3.lib;python39.lib;_tkinter.lib;python39_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -170,6 +181,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="FileName.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="image2gif.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="load_bin_data.cpp">
@@ -189,6 +203,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="my_plot.cpp" />
     <ClCompile Include="receivers.c" />
     <ClCompile Include="test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -202,6 +217,7 @@
     <ClInclude Include="load_data.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="matlab_function.h" />
+    <ClInclude Include="my_plot.h" />
     <ClInclude Include="receivers.h" />
   </ItemGroup>
   <ItemGroup>

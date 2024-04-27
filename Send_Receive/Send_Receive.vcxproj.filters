@@ -18,5 +18,8 @@
     <ClCompile Include="sender_debug2.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="sender_debug2 - 副本.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
