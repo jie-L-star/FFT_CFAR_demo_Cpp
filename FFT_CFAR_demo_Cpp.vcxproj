@@ -75,7 +75,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\visual studio 2019\libs\boost_1_83_0;D:\FFT_CFAR_demo_Cpp;E:\git\armadillo-12.8.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\lib;D:\Pycharm\miniconda3\libs;D:\FFT_CFAR_demo_Cpp\packages\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>E:\git\armadillo-12.8.1\examples\lib_win64;E:\visual studio 2019\libs\boost_1_83_0\lib;D:\Pycharm\miniconda3\libs;D:\FFT_CFAR_demo_Cpp\packages\lib;D:\FFT_CFAR_demo_Cpp\packages\bin;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

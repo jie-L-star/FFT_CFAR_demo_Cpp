@@ -1,3 +1,4 @@
+#define _CRT_SECURE_WARNINGS
 #include <main.h>
 #include <FFT_2D.h>
 #include <load_data.h>
@@ -7,7 +8,6 @@
 #include <time.h>
 #include <receivers.h>
 #include <my_plot.h>
-
 
 //数据包长度 FILE_LENGTH     数据包大小 1584 * 2 * ANT_LENGTH
 //修改端口与sender.c一致
@@ -40,9 +40,16 @@ int main() {
         val = val * step_v;
     }
 
-    load_data(2, 792, 792, "D:/FFT_CFAR_demo_Cpp/datareal/W_combmax8.csv", pre_load_data.W_combmax8);
+    load_data(2, 792, 792, "D:/干活/MATLAB-C++/datareal/W_combmax8.csv", pre_load_data.W_combmax8);
     Pre_load(pre_load_data.root_seq_slot_temp, pre_load_data.crs_temp);
     
+    //图片路径 修改png_path时需要同时修改my_plot.cpp
+    std::string exe_path = "D:/FFT_CFAR_demo_Cpp/png2gif/test.exe";
+    std::string png_path = "D:/FFT_CFAR_demo_Cpp/result_image/";
+    std::string gif_path = "D:/FFT_CFAR_demo_Cpp/result_image/";
+    char parameter[20] = "";  // 通道数 接收组数 帧速
+    sprintf_s(parameter, "%d %d %f", ANT_LENGTH, RECEIVE_N, 0.1);
+
     std::vector<std::vector<Complex>> data;
     std::vector<std::vector<Complex>> temp;
     CFAR_result my_result;
@@ -60,11 +67,7 @@ int main() {
 
     receive_init();
 
-    //PLOT_GIF pl[6];
-    //for (int i = 0; i < 6; i++)
-    //    pl->plot_GIF_start();
-
-    while (order<6) {
+    while (order < RECEIVE_N) {
         start_time = clock();
         
         // ---------------------bin文件数据包接收---------------------
@@ -103,8 +106,6 @@ int main() {
             // ---------------------结果输出---------------------
             my_plot(data_abs, ii+1, order, my_result.SWCfarResultNJ_c);
 
-            //pl[order].plot_GIF(data_abs, ii + 1, my_result.SWCfarResultNJ_c);
-
             if (my_result.Amplititude.size() != 0) {
                 std::cout << "Channel " << ii+1 << " CFAR result:\n  range:";
                 for (int i = 0; i < my_result.Amplititude.size(); i++) {
@@ -122,10 +123,10 @@ int main() {
         std::cout << "end: " << (clock() - start_time) << "ms" << std::endl;
     }
 
-    //for (int i = 0; i < 6; i++)
-    //    pl->plot_GIF_start();
-
     receive_stop();
+    //png2gif
+    std::string command = exe_path + " " + png_path + " " + gif_path + " " + parameter;
+    system(command.c_str());
 
     return 0;
 }

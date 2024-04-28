@@ -27,6 +27,8 @@
 
 #define M_PI acos(-1)
 
+#define RECEIVE_N 10	//只接收10次，绘制10张图片
+
 // 简化的复数定义（基于标准库）
 using Complex = std::complex<float>;
 //using namespace std;

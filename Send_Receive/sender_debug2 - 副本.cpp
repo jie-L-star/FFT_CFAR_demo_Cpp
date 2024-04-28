@@ -53,8 +53,8 @@ int main() {
     transmissionData.nSlotNum = 10;
     transmissionData.nRxFrameNum = 0;
 
-    char search_path1[MAX_PATH] = "D:/FFT_CFAR_demo_Cpp/datareal/95/013/*"; // replace with your directory
-    char search_path2[MAX_PATH] = "D:/FFT_CFAR_demo_Cpp/datareal/96/013/*"; // replace with your directory
+    char search_path1[MAX_PATH] = "D:/干活/MATLAB-C++/datareal/95/013/*"; // replace with your directory
+    char search_path2[MAX_PATH] = "D:/干活/MATLAB-C++/datareal/96/013/*"; // replace with your directory
     char file_path1[MAX_PATH], file_path2[MAX_PATH];
     FILE* file1, * file2;
 
@@ -96,8 +96,8 @@ int main() {
             std::cout << "Found file: " << find_data1.cFileName << "    " << find_data2.cFileName << std::endl;
 
             // Now you can use fopen to open the file and read its content
-            sprintf(file_path1, "D:/FFT_CFAR_demo_Cpp/datareal/95/013/%s", find_data1.cFileName); // replace with your directory
-            sprintf(file_path2, "D:/FFT_CFAR_demo_Cpp/datareal/96/013/%s", find_data2.cFileName); // replace with your directory
+            sprintf(file_path1, "D:/干活/MATLAB-C++/datareal/95/013/%s", find_data1.cFileName); // replace with your directory
+            sprintf(file_path2, "D:/干活/MATLAB-C++/datareal/96/013/%s", find_data2.cFileName); // replace with your directory
 
             //FILE* 
                 file1 = fopen(file_path1, "rb");

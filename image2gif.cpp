@@ -11,11 +11,11 @@ using namespace cv;
 int main() {
 
     char str[100] = {};
-    for (int i = 1; i <= 6; i++)
+    for (int i = 1; i <= 8; i++)
     {
         vector<string> pngFiles;
-        for (int j = 1; j <= 4; j++) {
-            sprintf(str, "D:/FFT_CFAR_demo_Cpp/result_image/tune_%d_%d.png", i, j);
+        for (int j = 1; j <= 1; j++) {
+            sprintf(str, "D:/FFT_CFAR_demo_Cpp/result_image/channel_%d_%d.png", i, j);
             pngFiles.emplace_back(str);
         }
         // Read the first PNG image to get its size
