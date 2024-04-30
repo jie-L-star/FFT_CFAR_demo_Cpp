@@ -6,7 +6,6 @@
 #include <CFAR.h>
 #include <time.h>
 
-
 /*
 * main.cpp 主函数，单线程读取并处理，结果和MATLAB通道6一致
 * main_2.cpp 主函数，尝试双线程，仅读取1*1000*792共计15次，耗时较长，还需要更改
@@ -17,6 +16,7 @@
 int main() {
 
     clock_t start_time = clock();
+
 
     std::string path = "D:/干活/MATLAB-C++/FFT_CFAR_demo/data_14_tune_6.csv";
     const int dim1 = 1;     // 第一维大小 通道(8个)

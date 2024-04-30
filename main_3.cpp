@@ -8,13 +8,17 @@
 #include <time.h>
 #include <receivers.h>
 #include <my_plot.h>
+#include <locate.h>
 
 //数据包长度 FILE_LENGTH     数据包大小 1584 * 2 * ANT_LENGTH
 //修改端口与sender.c一致
 
+
 int main() {
 
     clock_t start_time = clock();
+    //基站坐标
+    std::vector<std::vector<double>> test_locate_pos = { {0,1.2,3,4.8},{1e-5, 2e-5,1e-5,1e-5} };
 
     //对应matlab crs_ce_slot_rx_tx_013.mat
     //std::vector<std::vector<std::vector<Complex>>> crs_rx_Iq_slot_ant(nRxAnts, std::vector<std::vector<Complex>>(LengthFiles));
@@ -64,6 +68,8 @@ int main() {
     std::vector<std::vector<std::vector<Complex>>> data_tune(ANT_LENGTH, std::vector<std::vector<Complex>>(FILE_LENGTH, std::vector<Complex>(nSC)));
 
     uint16_t order = 0;
+    float r_zp[2] = { 0 };
+    
 
     receive_init();
 
@@ -78,6 +84,7 @@ int main() {
         std::cout << "end_Pre_Load: " << (clock() - start_time) << "ms" << std::endl;
 
         order++;
+        std::vector<double> range_array(ANT_LENGTH);
 
         //分别处理ANT_LENGTH个通道
         for (int ii = 0; ii < ANT_LENGTH; ii++){
@@ -104,7 +111,7 @@ int main() {
             /*std::cout << "end: " << (clock() - start_time) << "ms" << std::endl;*/
 
             // ---------------------结果输出---------------------
-            my_plot(data_abs, ii+1, order, my_result.SWCfarResultNJ_c);
+            //my_plot(data_abs, ii+1, order, my_result.SWCfarResultNJ_c);
 
             if (my_result.Amplititude.size() != 0) {
                 std::cout << "Channel " << ii+1 << " CFAR result:\n  range:";
@@ -115,11 +122,25 @@ int main() {
                 std::cout << "  velocity:";
                 for (int i = 0; i < my_result.Amplititude.size(); i++) {
                     std::cout << (velocity_2dfft[my_result.SWCfarResultNJ_c[1][i]]) << "m/s; ";
+
+                    if (velocity_2dfft[my_result.SWCfarResultNJ_c[1][i]]) {
+                        range_array[ii] = range_2dfft[my_result.SWCfarResultNJ_c[0][i]];
+                    }
                 }
                 std::cout << std::endl << std::endl;
+
             }
+
             else std::cout << "Channel " << ii+1 << " CFAR result:\n  None" << std::endl << std::endl;
         }
+
+        std::vector<double> range_array_temp(4);
+
+        for (int i = 0; i < 4; i++)
+            range_array_temp[i] = (((range_array[2 * i]) > (range_array[2 * i + 1])) ? (range_array[2 * i]) : (range_array[2 * i + 1]));
+        
+        locate(test_locate_pos, 4, range_array_temp, r_zp);
+
         std::cout << "end: " << (clock() - start_time) << "ms" << std::endl;
     }
 
